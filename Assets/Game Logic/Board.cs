@@ -3,6 +3,8 @@
     public class Board
     {
 
+        #region Properties
+
         /// <summary>
         /// The current state of the board. integer values represent the different contents of a cell. 0 indicates an empty cell.
         /// </summary>
@@ -30,12 +32,16 @@
             }
         }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
-        /// Creates an w * h sized board
+        /// Creates an w * h sized, empty board.
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        public Board(int w, int h)
+        /// <param name="w">The width the board should have.</param>
+        /// <param name="h">The height the board should have.</param>
+        private Board(int w, int h)
         {
             // Create a new board of empty spaces.
             board = new byte[w][];
@@ -46,5 +52,28 @@
                     board[i][j] = 0;
             }
         }
+
+        /// <summary>
+        /// Creates a generated 
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="numPipes"></param>
+        public Board(int w, int h, int numPipes) : this(w, h)
+        {
+            ConstructBoard(numPipes);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void ConstructBoard(int numColors)
+        {
+
+        }
+
+        #endregion
+
     }
 }
