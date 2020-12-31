@@ -1,7 +1,15 @@
-﻿namespace FreeFlowAI
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+
+namespace FreeFlowAI
 {
     public class Board
     {
+        #region Static
+
+
+        #endregion
 
         #region Properties
 
@@ -9,6 +17,11 @@
         /// The current state of the board. integer values represent the different contents of a cell. 0 indicates an empty cell.
         /// </summary>
         public byte[][] board { get; private set; }
+
+        /// <summary>
+        /// The keys identifying the colors for the board.
+        /// </summary>
+        Dictionary<byte, Color> ColorKeys;
 
         /// <summary>
         /// Gets the width of the board.
@@ -39,8 +52,8 @@
         /// <summary>
         /// Creates an w * h sized, empty board.
         /// </summary>
-        /// <param name="w">The width the board should have.</param>
-        /// <param name="h">The height the board should have.</param>
+        /// <param name="w">The width of the board.</param>
+        /// <param name="h">The height of the board.</param>
         private Board(int w, int h)
         {
             // Create a new board of empty spaces.
@@ -54,13 +67,20 @@
         }
 
         /// <summary>
-        /// Creates a generated 
+        /// Creates a solvable board with a specified number of unique pipes.
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        /// <param name="numPipes"></param>
-        public Board(int w, int h, int numPipes) : this(w, h)
+        /// <param name="w">The width of the board.</param>
+        /// <param name="h">The height of the board.</param>
+        /// <param name="numPipes">The number of unique pipes to create.</param>
+        public Board(int w, int h, byte numPipes) : this(w, h)
         {
+            System.Random rng = new System.Random();
+            // Create color pieces.
+            ColorKeys = new Dictionary<byte, Color>();
+            for (byte i = 0; i < numPipes; i++)
+                ColorKeys.Add(i, Color.FromArgb(rng.Next(0, 256), rng.Next(0, 256), rng.Next(0, 256)));
+
+            // Construct the board.
             ConstructBoard(numPipes);
         }
 
@@ -70,10 +90,37 @@
 
         private void ConstructBoard(int numColors)
         {
-
+            System.Random rng = new System.Random();
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    board[i][j] = (byte)rng.Next(1, numColors + 1);
+                }
+            }
         }
 
         #endregion
 
+        #region Helpers
+
+        /// <summary>
+        /// Converts a board to ascii representation.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string retVal = "";
+            for (int h = 0; h < height; h++)
+            {
+                for (int w = 0; w < width; w++)
+                {
+                    retVal += board[w][h];
+                }
+                retVal += "\n";
+            }
+            return retVal;
+        }
+        #endregion
     }
 }
